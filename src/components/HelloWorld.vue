@@ -1,6 +1,11 @@
 <template>
   <div class="hello">
+    <h3>todo: {{ todo }}</h3>
+    <h2>aa {{ reverse }}</h2>
+    <button @click="updateSome">aa {{ some }}</button>
+    <input type="submit" :value="msg">
     <h1>{{ msg }}</h1>
+    <Mini miniMsg="something message" ref="minimini" />
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -35,11 +40,50 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Watch, Ref, Vue } from 'vue-property-decorator';
+import Mini from './MiniComponent.vue';
 
-@Component
+@Component({
+  components: {
+    Mini
+  }
+})
 export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
+  some: string | null = null;
+  todoId = 1;
+  todo: object = {};
+
+  @Prop() private readonly msg!: string;
+
+  @Ref() private readonly minimini?: Mini;
+
+  @Watch('some')
+  onSomeChanged(val: string, oldVal: string) {
+    console.info(val, oldVal);
+  }
+
+  @Watch('todoId')
+  onTodoIdChanged(val: number, oldVal: number) {
+    console.info(val, oldVal);
+    fetch(`https://jsonplaceholder.typicode.com/todos/${this.todoId}`)
+    .then((resolve) => resolve.json())
+    .then((resolve) => this.todo = resolve)
+    .catch((reject) => console.info(reject))
+    .finally();
+  }
+
+  get reverse() {
+    return this.msg.split("").reverse().join("") + " " + this.some?.split("").reverse().join("");
+  }
+
+  updateSome() {
+    console.log("a:", this.some);
+    this.some = "some";
+    console.info("clicked");
+    this.todoId++;
+
+    this.minimini?.updateFoo();
+  }
 }
 </script>
 
