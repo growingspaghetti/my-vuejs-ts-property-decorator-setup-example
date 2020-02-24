@@ -46,6 +46,12 @@ In onTodoIdChanged() the todo Object was updated.
 
 This Date value was a member variable of Mini.class. But through the component Ref via name-binding of minimini, by a method updateFoo() remotely called from HelloWorld.class, the vaule was updated each time that the button bound to updateSome() was clicked.
 
+# Reactivity in Vue.js
+
+https://vuejs.org/2016/02/06/common-gotchas/#Why-isn%E2%80%99t-the-DOM-updating
+
+Swapping two array objects perhaps breaks the object tie and so as the object tracking functionality of vue and the reactivity. Using array.splice and array.push might solve that problem.
+
 ----
 
 # Install vue-cli
